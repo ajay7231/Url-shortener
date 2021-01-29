@@ -1,17 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
 const shortUrl = require("./models/shortUrl");
 
 const app = express();
-
+//local db connection
 mongoose.connect("mongodb://localhost/urlShortner", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
 });
+
+//ejs view engine
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
+
+
 
 app.get("/", async (req, res) => {
   const shortUrls = await shortUrl.find()
@@ -24,6 +27,8 @@ app.post("/shortUrls", async (req, res) => {
   });
   res.redirect("/");
 });
+
+//redirecting to full url
 
 app.get('/:shortUrl',async (req,res)=>{
     const shorturl = await shortUrl.findOne({short:req.params.shortUrl})
